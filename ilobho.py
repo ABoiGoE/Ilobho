@@ -1,7 +1,14 @@
+#These grab the token from the .env file
+from dotenv import load_dotenv
+import os
+#These are required to make the discord bot run
 import discord
 from discord.ext import commands
+#These are used for various commands
 import random
 import sys
+
+load_dotenv() #Grabs the token from the .env file
 
 description = '''An example bot to showcase the discord.ext.commands extension
 module.
@@ -9,11 +16,11 @@ There are a number of utility commands being showcased here.'''
 
 intents = discord.Intents.default()
 
-bot = commands.Bot(command_prefix='?', description=description, intents=intents)
+bot = commands.Bot(command_prefix='?', description=description, intents=intents) #Initializes the bot
 
 
 @bot.event
-async def on_ready():
+async def on_ready(): #A check for when the bot has logged in
     print(f'Logged in as {bot.user} (ID: {bot.user.id})')
     print('------')
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="your requests"))
@@ -52,4 +59,4 @@ async def repeat(ctx, times: int, content='repeating...'):
 
 
 
-bot.run('OTk5NTE3MjYwMDA1Nzg5NzU3.GAuZTs.l3upxmURA3Sg6UNYueXEcDWE9a3DcsFwBMsjGw')
+bot.run(os.getenv('TOKEN'))
