@@ -10,13 +10,13 @@ import sys
 
 load_dotenv() #Grabs the token from the .env file
 
-description = '''An example bot to showcase the discord.ext.commands extension
-module.
-There are a number of utility commands being showcased here.'''
+description = '''A bot that does an undetermined amount of things that are in a variety of catagories.'''
 
+#Initializing variables that will be used for the bot
 intents = discord.Intents.default()
+keyword = "?"
 
-bot = commands.Bot(command_prefix='?', description=description, intents=intents) #Initializes the bot
+bot = commands.Bot(command_prefix=keyword, description=description, intents=intents) #Initializes the bot
 
 
 @bot.event
@@ -58,5 +58,12 @@ async def repeat(ctx, times: int, content='repeating...'):
         await ctx.send(content)
 
 
+@bot.command()
+async def prefix(ctx, prefix):
+    """Changes the prefix of the bot to be whatever the user chooses"""
+    bot.command_prefix = prefix
+    await ctx.send(f"Prefix is now {prefix}")
 
+
+# This runs the bot
 bot.run(os.getenv('TOKEN'))
