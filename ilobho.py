@@ -26,44 +26,43 @@ async def on_ready(): #A check for when the bot has logged in
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="your requests"))
 
 
-@bot.command()
+@bot.slash_command(name="add")
 async def add(ctx, left: int, right: int):
     """Adds two numbers together."""
-    await ctx.send(left + right)
+    await ctx.respond(left + right)
 
 
-@bot.command()
+@bot.slash_command(name="roll")
 async def roll(ctx, dice: str):
     """Rolls a dice in NdN format."""
     try:
         rolls, limit = map(int, dice.split('d'))
     except Exception:
-        await ctx.send('Format has to be in NdN!')
+        await ctx.respond('Format has to be in NdN!')
         return
 
     result = ', '.join(str(random.randint(1, limit)) for r in range(rolls))
-    await ctx.send(result)
+    await ctx.respond(result)
 
 
-@bot.command(description='For when you wanna settle the score some other way')
-async def choose(ctx, *choices: str):
+@bot.slash_command(name="choose", description='For when you wanna settle the score some other way')
+async def choose(ctx, choices):
     """Chooses between multiple choices."""
-    await ctx.send(random.choice(choices))
+    options = choices.split(", ")
+    choice = random.choice(options)
+    await ctx.respond(str(choice))
 
 
-@bot.command()
+@bot.slash_command(name="repeat")
 async def repeat(ctx, times: int, content='repeating...'):
     """Repeats a message multiple times."""
     for i in range(times):
-        await ctx.send(content)
+        await ctx.respond(content)
 
-
-@bot.command()
-async def prefix(ctx, prefix):
-    """Changes the prefix of the bot to be whatever the user chooses"""
-    bot.command_prefix = prefix
-    await ctx.send(f"Prefix is now {prefix}")
-
+@bot.slash_command(name="shutdown")
+@commands.is_owner()
+async def shutdown(ctx):
+    exit()
 
 # This runs the bot
 bot.run(os.getenv('TOKEN'))
